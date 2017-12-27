@@ -48,7 +48,7 @@ class ShortestEdition
     return true
   end
 
-  # Is there a word of size remaining to be used?
+  # Is there a word left in the size bucket?
   def have_size?(size)
     @buckets[size] && @buckets[size].size != 0
   end
@@ -70,9 +70,10 @@ class ShortestEdition
   
   # Simply add the suggested sized word to the line, and then try
   # to add another word based on the remaining space, or our
-  # most popular remaining size.
+  # most numerous remaining size.
   def add_words_starting_size(size)
-    return if remaining < 2 || buckets_empty?
+    return if remaining <= 1 || buckets_empty?
+
     if !have_size?(size)
       try_another_size(size)
     else
