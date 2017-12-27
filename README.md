@@ -58,9 +58,15 @@ Use the -a flag to run through all the texts:
     Line end gaps: 0
     Largest gap: 0
     ---ulysses---
-    shortest.rb:74: stack level too deep (SystemStackError)
+    ^Cshortest.rb:65:in `block in buckets_empty?': Interrupt
+    	from shortest.rb:65:in `each'
+    	from shortest.rb:65:in `detect'
+    	from shortest.rb:65:in `buckets_empty?'
+    	from shortest.rb:104:in `compress'
+    	from shortest.rb:139:in `do_book'
+    	from shortest.rb:150:in `<main>'
 
-Oh no! I never liked that book. I investigated the problem, and it became apparent that there was something
+Oh no! It hung on Ulysses. I never liked that book. I investigated the problem, and it became apparent that there was something
 fishy in the text. Let's look at the lengths of the words in Ulysses:
 
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 
@@ -73,9 +79,9 @@ words?
     "Nationalgymnasiummuseumsanatoriumandsuspensoriumsordinaryprivatdocentgeneralhistoryspecialprofessordoctor"
 
 Ah, well, not exactly single words, but for sure there aren't any spaces in there. So the alorithm can't place words
-bigger than one line, and gets stuck. I decided it was acceptable to leave these "words" out of the compressed
-version of Ulysses, I think they won't be missed. When preparing the words, we now skip any that are too long
-for a line:
+bigger than one line, and gets stuck because the buckets can never empty out. I decided it was acceptable to leave
+these "words" out of the compressed version of Ulysses, I think they won't be missed. When preparing the words, we
+now skip any that are too long for a line:
 
     def prepare_buckets
       @buckets = {}
