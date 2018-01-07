@@ -1,6 +1,6 @@
 # Shortest Edition
 # Stephen Sykes, December 2017
-# Pack the unique words of a text into 80 character lines efficiently.
+# Pack the words of a text into 80 character lines efficiently.
 
 class ShortestEdition
   def initialize(filename)
@@ -15,7 +15,6 @@ class ShortestEdition
     File.readlines(filename).each do |line|
       line.split.each {|word| @words << word}
     end
-    @words.uniq!
   end
   
   # Place words in buckets according to their length.
@@ -137,7 +136,7 @@ def do_book(filename)
   puts "---#{filename.gsub(/.txt$/, "")}---"
   wundernut = ShortestEdition.new(filename)
   wundernut.compress
-  wundernut.print_book(filename + ".shortversion")
+  wundernut.print_book(filename.gsub(/.txt$/, ".compressed.txt"))
   wundernut.report
 end
 

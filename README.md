@@ -8,8 +8,8 @@ When run, the program produces the following result:
 
     $ ruby shortest.rb
     ---alastalon_salissa---
-    Lines: 9225
-    Pages: 369
+    Lines: 21162
+    Pages: 847
     Line end gaps: 0
     Largest gap: 0
 
@@ -19,18 +19,18 @@ The basic idea is to split the words into "buckets" which contain words of the s
 them on output lines one by one.
 
 My first attempts focussed on using the biggest words first on each line, then filling the last
-bits of space with shorter ones. A common result using this method was about 9364 lines, 375 pages.
+bits of space with shorter ones. It didn't result in perfectly filled lines.
 
 I then changed my approach, and started to add words preferentially of the most popular lengths. This allowed
 me to drop a few pages off the result, but still there were some gaps at the end of lines.
 
 Then I refined the algorithm to include the possibility to split the remaining space on a line into two equal pieces 
-if there are words that would fill it. BINGO! With a bit of tweaking this yielded the goal, zero gaps, 369 pages.
+if there are words that would fill it. BINGO! With a bit of tweaking this yielded the goal, zero gaps, 847 pages.
 
 Now I was able to take a few useless bits of code out and hone the algorithm to the minimum that would work perfectly.
-It was surprisingly few lines of code, and fast.
+It was surprisingly few lines of code, and quick enough.
 
-Why stop with Alastalon Salissa? I tried some other texts. Project Gutenberg provided me
+Why stop with Alastalon Salissa? The algorithm should be generic, so I tried some other texts. Project Gutenberg provided me
 with some classics: Sherlock Holmes, Moby Dick, Ulysses, Treasure Island, War and Peace, and appropriately 
 for the season Dickens's A Christmas Carol.
 
@@ -38,23 +38,23 @@ Use the -a flag to run through all the texts:
 
     $ ruby shortest.rb -a
     ---alastalon_salissa---
-    Lines: 9225
-    Pages: 369
+    Lines: 21162
+    Pages: 847
     Line end gaps: 0
     Largest gap: 0
     ---adventures_of_sherlock---
-    Lines: 1500
-    Pages: 60
+    Lines: 6910
+    Pages: 277
     Line end gaps: 0
     Largest gap: 0
     ---return_of_sherlock---
-    Lines: 1526
-    Pages: 62
+    Lines: 7496
+    Pages: 300
     Line end gaps: 0
     Largest gap: 0
     ---moby_dick---
-    Lines: 3632
-    Pages: 146
+    Lines: 15236
+    Pages: 610
     Line end gaps: 0
     Largest gap: 0
     ---ulysses---
@@ -96,59 +96,73 @@ Let's have another go:
 
     $ ruby shortest.rb -a
     ---alastalon_salissa---
-    Lines: 9225
-    Pages: 369
+    Lines: 21162
+    Pages: 847
     Line end gaps: 0
     Largest gap: 0
     ---adventures_of_sherlock---
-    Lines: 1500
-    Pages: 60
+    Lines: 6910
+    Pages: 277
     Line end gaps: 0
     Largest gap: 0
     ---return_of_sherlock---
-    Lines: 1526
-    Pages: 62
+    Lines: 7496
+    Pages: 300
     Line end gaps: 0
     Largest gap: 0
     ---moby_dick---
-    Lines: 3632
-    Pages: 146
+    Lines: 15236
+    Pages: 610
     Line end gaps: 0
     Largest gap: 0
     ---ulysses---
-    Lines: 5133
-    Pages: 206
+    Lines: 18808
+    Pages: 753
     Line end gaps: 0
     Largest gap: 0
     ---treasure_island---
-    Lines: 1165
-    Pages: 47
+    Lines: 4696
+    Pages: 188
     Line end gaps: 0
     Largest gap: 0
     ---war_and_peace---
-    Lines: 4649
-    Pages: 186
+    Lines: 39640
+    Pages: 1586
     Line end gaps: 0
     Largest gap: 0
     ---christmas_carol---
-    Lines: 740
-    Pages: 30
+    Lines: 2181
+    Pages: 88
     Line end gaps: 0
     Largest gap: 0
 
 Success! Eight books compressed to the max. Note that some texts will inevitably not get perfect results, but
 I'm quite satisfied with this performance.
 
-The output files, if you want to read them, have .shortversion appended,
-e.g. alastalon_salissa.txt.shortversion
+The output files, if you want to read them, have .compressed.txt as the suffix,
+e.g. alastalon_salissa.compressed.txt
+
+### Validation
+
+The resulting file passes validation:
+
+    $ ./alastalo_validator alastalon_salissa.compressed.txt
+    All words found:    [✓]
+    Lines max 80 chars: [✓]
+    21162 lines
+
+The validator actually saved me sending an incorrect entry. When developing this I interpreted the rules to mean
+that I could include only a single instance of each word, so I was running uniq on the word list before using it. This 
+produces a very compressed version of the book, only 9225 lines. But the validator complained, and including all instances
+of the words fixed it.
 
 ### Quotes
 
-*"Christmas. wonderful legatee, shrivelled clutching, deadest burial Idea, Last one"* -- A timely reminder from Charles Dickens, A Christmas Carol (compressed)
+*"Christmas, happy merry Vanilla hands."* -- A timely reminder from Charles Dickens, A Christmas Carol (compressed)
 
-*"For ye sidetable, reassured keyholes bright, retreat."* -- Advice from Robert Louis Stevenson, Treasure Island (compressed)
+*"more furiously drinking, the as others drunk doo."* -- Advice from Robert Louis Stevenson, Treasure Island (compressed)
 
-*"Bolkónski” certain, festive practicing deplorable."* -- Warning from Leo Tolstoy, War and Peace (compressed)
+*"All of a Prince can’t fete the to à unsuited CHAPTER"* -- Warning from Leo Tolstoy, War and Peace (compressed)
 
 *"Monkwords, marybeads jabber on their girdles"* -- Total nonsense from James Joyce, Ulysses (original)
 
