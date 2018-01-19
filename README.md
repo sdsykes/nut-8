@@ -13,6 +13,20 @@ When run, the program produces the following result:
     Line end gaps: 0
     Largest gap: 0
 
+### Validation
+
+The resulting file passes validation:
+
+    $ ./alastalo_validator alastalon_salissa.compressed.txt
+    All words found:    [✓]
+    Lines max 80 chars: [✓]
+    21162 lines
+
+The validator actually saved me sending an incorrect entry. When developing this I interpreted the rules to mean
+that I could include only a single instance of each word, so I was running uniq on the word list before using it. This 
+produces a very compressed version of the book, only 9225 lines. But the validator complained, and including all instances
+of the words fixed it.
+
 ### Solution description
 
 The basic idea is to split the words into "buckets" which contain words of the same length, and then place
@@ -141,20 +155,6 @@ I'm quite satisfied with this performance.
 
 The output files, if you want to read them, have .compressed.txt as the suffix,
 e.g. alastalon_salissa.compressed.txt
-
-### Validation
-
-The resulting file passes validation:
-
-    $ ./alastalo_validator alastalon_salissa.compressed.txt
-    All words found:    [✓]
-    Lines max 80 chars: [✓]
-    21162 lines
-
-The validator actually saved me sending an incorrect entry. When developing this I interpreted the rules to mean
-that I could include only a single instance of each word, so I was running uniq on the word list before using it. This 
-produces a very compressed version of the book, only 9225 lines. But the validator complained, and including all instances
-of the words fixed it.
 
 ### Quotes
 
